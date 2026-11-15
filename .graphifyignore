@@ -1,0 +1,32 @@
+# Studio project map: what graphify leaves out.
+# Copied to <project>/.graphifyignore by /studio map. Same syntax as .gitignore.
+
+# Superseded versions and temporary worktrees
+archive/
+code/.worktrees/
+
+# Scores, raw agent output and debate drafts: keeps blind reviewers blind and the map about the product
+docs/reviews/
+docs/runs/
+docs/ITERATION_LOG.md
+docs/TEST_REPORT.md
+business/model/
+
+# The map itself and dependency or build output
+graphify-out/
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/.venv/
+**/__pycache__/
+**/coverage/
+**/*.lock
+**/pnpm-lock.yaml
+**/package-lock.json
+
+# Secrets and local state
+**/.env
+**/.env.*
+!**/.env.example
+**/.DS_Store
