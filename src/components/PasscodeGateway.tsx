@@ -30,6 +30,27 @@ export const PasscodeGateway: React.FC<PasscodeGatewayProps> = ({ onAuthenticate
     setError(null);
   };
 
+  // Enable physical keyboard entry (0-9, Backspace, Enter, Esc)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key >= "0" && e.key <= "9") {
+        handleDigit(e.key);
+      } else if (e.key === "Backspace") {
+        handleBackspace();
+      } else if (e.key === "Enter" && passcode.length >= 4) {
+        submitPasscode(passcode);
+      } else if (e.key === "Escape") {
+        handleClear();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [passcode]);
+
   const submitPasscode = async (codeToSubmit = passcode) => {
     if (!codeToSubmit || codeToSubmit.length < 4) {
       setError("Please enter a valid 4-digit passcode.");

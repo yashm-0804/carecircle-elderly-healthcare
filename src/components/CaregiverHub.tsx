@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import {
   Medication,
+  DoseRecord,
   DoctorAppointment,
   CaregiverAlert,
   AdherenceMetrics,
@@ -24,6 +25,7 @@ import {
 
 interface CaregiverHubProps {
   currentUser: UserProfile;
+  doses: DoseRecord[];
   medications: Medication[];
   appointments: DoctorAppointment[];
   alerts: CaregiverAlert[];
@@ -36,6 +38,7 @@ interface CaregiverHubProps {
 
 export const CaregiverHub: React.FC<CaregiverHubProps> = ({
   currentUser,
+  doses,
   medications,
   appointments,
   alerts,
@@ -82,8 +85,14 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
     setSimulating(true);
     setSimulateSuccess(null);
     try {
-      await onSimulateEscalation("dose_02"); // escalate Lisinopril
-      setSimulateSuccess("Proactive escalation alert & email dispatched to caregiver circle!");
+      // Find the first available scheduled, snoozed, or active dose dynamically
+      const targetDose = doses.find((d) => d.status === "SCHEDULED" || d.status === "SNOOZED") || doses[0];
+      if (!targetDose) {
+        setSimulateSuccess("No doses currently scheduled to escalate.");
+        return;
+      }
+      await onSimulateEscalation(targetDose.id);
+      setSimulateSuccess(`Proactive missed dose alert & email dispatched for ${targetDose.medicationName}!`);
     } catch (err) {
       console.error(err);
     } finally {

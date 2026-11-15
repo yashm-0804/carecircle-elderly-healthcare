@@ -33,14 +33,15 @@ export const SeniorKiosk: React.FC<SeniorKioskProps> = ({
   const [listening, setListening] = useState(false);
   const [voiceFeedback, setVoiceFeedback] = useState<string | null>(null);
 
-  // Find the next upcoming scheduled dose
-  const nextDose = doses.find((d) => d.status === "SCHEDULED" || d.status === "SNOOZED");
+  // Sort doses chronologically so the earliest upcoming dose is prioritized
+  const sortedDoses = [...doses].sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
+  const nextDose = sortedDoses.find((d) => d.status === "SCHEDULED" || d.status === "SNOOZED");
   const nextAppt = appointments.find((a) => a.status === "UPCOMING");
 
   // Web Speech API Voice Check-in
   const handleVoiceCheckIn = () => {
     if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
-      alert("Voice recognition is not supported in this browser. Please use the button instead.");
+      setVoiceFeedback("Voice recognition is not supported in this browser. Please tap the button.");
       return;
     }
 
@@ -222,7 +223,7 @@ export const SeniorKiosk: React.FC<SeniorKioskProps> = ({
         </h3>
 
         <div className="space-y-4">
-          {doses.map((dose) => (
+          {sortedDoses.map((dose) => (
             <div
               key={dose.id}
               className={`p-4 sm:p-5 rounded-2xl border-2 transition flex items-center justify-between gap-4 ${

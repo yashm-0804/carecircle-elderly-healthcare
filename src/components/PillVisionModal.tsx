@@ -19,10 +19,12 @@ export const PillVisionModal: React.FC<PillVisionModalProps> = ({
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<PillAnalysisResult | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [scanError, setScanError] = useState<string | null>(null);
 
   // Sample mock image base64 for quick demonstration
   const handleSimulateScan = async () => {
     setAnalyzing(true);
+    setScanError(null);
     setPreviewImage(
       "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60"
     );
@@ -40,9 +42,12 @@ export const PillVisionModal: React.FC<PillVisionModalProps> = ({
       const data = await res.json();
       if (res.ok && data.success) {
         setResult(data.analysis);
+      } else {
+        setScanError(data.error || "Could not analyze the medication image. Please retry.");
       }
     } catch (err) {
       console.error("Vision check failed:", err);
+      setScanError("Network or camera processing error. Please try again.");
     } finally {
       setAnalyzing(false);
     }
@@ -57,6 +62,7 @@ export const PillVisionModal: React.FC<PillVisionModalProps> = ({
       const base64 = reader.result as string;
       setPreviewImage(base64);
       setAnalyzing(true);
+      setScanError(null);
 
       try {
         const res = await fetch("/api/vision/verify", {
@@ -71,9 +77,12 @@ export const PillVisionModal: React.FC<PillVisionModalProps> = ({
         const data = await res.json();
         if (res.ok && data.success) {
           setResult(data.analysis);
+        } else {
+          setScanError(data.error || "Unable to read pill label from image.");
         }
       } catch (err) {
         console.error("Upload check failed:", err);
+        setScanError("Failed to upload and analyze image. Please retry.");
       } finally {
         setAnalyzing(false);
       }
@@ -125,6 +134,18 @@ export const PillVisionModal: React.FC<PillVisionModalProps> = ({
           </div>
 
           {/* Camera / Upload Section */}
+          {scanError && (
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-900 text-sm flex items-center justify-between">
+              <span className="font-semibold">{scanError}</span>
+              <button
+                onClick={() => setScanError(null)}
+                className="text-xs font-bold text-rose-700 underline"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
           {!result && (
             <div className="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-sky-500 transition bg-slate-50/50">
               {analyzing ? (

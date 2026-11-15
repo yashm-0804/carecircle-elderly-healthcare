@@ -25,6 +25,10 @@ export async function analyzePillImage(
 
   if (apiKey) {
     try {
+      const mimeMatch = base64Image.match(/^data:(image\/\w+);base64,/);
+      const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
+      const cleanBase64 = base64Image.replace(/^data:image\/\w+;base64,/, "");
+
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
@@ -51,8 +55,8 @@ Return ONLY a valid JSON object matching this schema:
                   },
                   {
                     inlineData: {
-                      mimeType: "image/jpeg",
-                      data: base64Image.replace(/^data:image\/\w+;base64,/, ""),
+                      mimeType: mimeType,
+                      data: cleanBase64,
                     },
                   },
                 ],

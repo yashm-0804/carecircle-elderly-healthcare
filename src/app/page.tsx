@@ -55,6 +55,32 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Restore session from localStorage if available
+    try {
+      const savedUser = localStorage.getItem("carecircle_session");
+      if (savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
+      }
+    } catch (e) {
+      // Ignore storage errors
+    }
+  }, []);
+
+  const handleAuthenticated = (profile: UserProfile) => {
+    setCurrentUser(profile);
+    try {
+      localStorage.setItem("carecircle_session", JSON.stringify(profile));
+    } catch (e) {}
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem("carecircle_session");
+    } catch (e) {}
+  };
+
+  useEffect(() => {
     fetchData();
   }, [currentUser]);
 
@@ -173,13 +199,13 @@ export default function Home() {
 
       <Navbar
         currentUser={currentUser}
-        onLogout={() => setCurrentUser(null)}
+        onLogout={handleLogout}
         activeRole={currentUser?.role || "GUEST"}
       />
 
       <main id="main-content" className="flex-1" role="main" aria-label="CareCircle main content">
         {!currentUser ? (
-          <PasscodeGateway onAuthenticated={(profile) => setCurrentUser(profile)} />
+          <PasscodeGateway onAuthenticated={handleAuthenticated} />
         ) : currentUser.role === "SENIOR" ? (
           <SeniorKiosk
             doses={doses}
@@ -198,6 +224,7 @@ export default function Home() {
         ) : (
           <CaregiverHub
             currentUser={currentUser}
+            doses={doses}
             medications={medications}
             appointments={appointments}
             alerts={alerts}
