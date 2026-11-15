@@ -24,27 +24,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [fontSizeLevel, setFontSizeLevel] = useState<"normal" | "large" | "xlarge">("normal");
 
   useEffect(() => {
-    // Check localStorage or system preference on mount
+    // Default view is strictly Light Mode unless user explicitly selected dark in localStorage
     try {
       const savedTheme = localStorage.getItem("carecircle_theme") as "light" | "dark" | null;
-      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initial = savedTheme || (systemPrefersDark ? "dark" : "light");
+      const initial = savedTheme === "dark" ? "dark" : "light";
       setTheme(initial);
       applyTheme(initial);
-
-      // Listen for system theme changes if user hasn't explicitly set a preference
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = (e: MediaQueryListEvent) => {
-        if (!localStorage.getItem("carecircle_theme")) {
-          const newTheme = e.matches ? "dark" : "light";
-          setTheme(newTheme);
-          applyTheme(newTheme);
-        }
-      };
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
     } catch (e) {
-      // Ignore storage/media query errors in restricted environments
+      setTheme("light");
+      applyTheme("light");
     }
   }, []);
 
