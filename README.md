@@ -4,6 +4,7 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2_App_Router-black?logo=next.js)](https://nextjs.org/)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyashm-0804%2Fcarecircle-elderly-healthcare)
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal_%2B_DDD-purple)](./src/core)
 [![Tests](https://img.shields.io/badge/Tests-39_Passed-brightgreen?logo=vitest)](./src/__tests__)
 [![Accessibility](https://img.shields.io/badge/A11y-WCAG_2.1_AAA-orange)](https://www.w3.org/WAI/WCAG21/quickref/)
