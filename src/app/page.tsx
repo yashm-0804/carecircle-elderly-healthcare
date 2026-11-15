@@ -7,6 +7,9 @@ import { PasscodeGateway } from "@/components/PasscodeGateway";
 import { SeniorKiosk } from "@/components/SeniorKiosk";
 import { CaregiverHub } from "@/components/CaregiverHub";
 import { FamilyView } from "@/components/FamilyView";
+import { CareChatbot } from "@/components/CareChatbot";
+import { ProfileModal } from "@/components/ProfileModal";
+import { SettingsModal } from "@/components/SettingsModal";
 
 export default function Home() {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
@@ -14,6 +17,9 @@ export default function Home() {
   const [medications, setMedications] = useState<Medication[]>([]);
   const [appointments, setAppointments] = useState<DoctorAppointment[]>([]);
   const [alerts, setAlerts] = useState<CaregiverAlert[]>([]);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
   const [metrics, setMetrics] = useState<AdherenceMetrics>({
     totalScheduled: 4,
     totalTaken: 1,
@@ -188,22 +194,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 transition-colors">
+    <div className="min-h-screen flex flex-col bg-slate-50/70 text-slate-900 transition-colors relative overflow-hidden">
+      {/* Ambient Apple Liquid Glass Background Glow Orbs */}
+      <div className="fixed top-[-10vw] left-[-10vw] w-[45vw] h-[45vw] rounded-full bg-gradient-to-tr from-sky-200/40 to-blue-300/30 blur-3xl pointer-events-none animate-float-slow -z-10" />
+      <div className="fixed bottom-[-10vw] right-[-10vw] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-pink-200/40 to-purple-200/30 blur-3xl pointer-events-none animate-float-reverse -z-10" />
+      <div className="fixed top-[30%] right-[15%] w-[35vw] h-[35vw] rounded-full bg-gradient-to-tr from-pink-100/30 via-sky-100/30 to-indigo-100/25 blur-3xl pointer-events-none animate-pulse-subtle -z-10" />
+
       {/* Skip to main content link for keyboard accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-sky-600 focus:text-white focus:rounded-xl focus:text-sm focus:font-bold"
+        className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-sky-600 focus:text-white focus:rounded-xl focus:text-sm focus:font-bold"
       >
         Skip to main content
       </a>
 
+      {/* Floating Apple Glass Menu Bar */}
       <Navbar
         currentUser={currentUser}
         onLogout={handleLogout}
         activeRole={currentUser?.role || "GUEST"}
+        onOpenProfile={() => setShowProfile(true)}
+        onOpenSettings={() => setShowSettings(true)}
       />
 
-      <main id="main-content" className="flex-1" role="main" aria-label="CareCircle main content">
+      <main id="main-content" className="flex-1 pb-16 pt-3" role="main" aria-label="CareCircle main content">
         {!currentUser ? (
           <PasscodeGateway onAuthenticated={handleAuthenticated} />
         ) : currentUser.role === "SENIOR" ? (
@@ -237,9 +251,29 @@ export default function Home() {
         )}
       </main>
 
-      <footer role="contentinfo" className="border-t border-slate-200 py-6 bg-white text-center text-xs text-slate-500 font-medium">
+      {/* Profile Modal */}
+      {showProfile && currentUser && (
+        <ProfileModal
+          currentUser={currentUser}
+          onClose={() => setShowProfile(false)}
+        />
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <SettingsModal
+          onClose={() => setShowSettings(false)}
+          onResetData={() => fetchData()}
+        />
+      )}
+
+      {/* AI Care Companion Chatbot (Carey) */}
+      <CareChatbot />
+
+      {/* Frosted Glass Footer */}
+      <footer role="contentinfo" className="py-6 border-t border-white/60 bg-white/40 backdrop-blur-md text-center text-xs text-slate-500 font-semibold">
         <p>
-          CareCircle Elderly Care & Medication Management Platform • Built with Anti-Gravity for PromptWars x Catalyst
+          CareCircle Elderly Healthcare Management Platform • Apple Glass Design Edition • Built with Anti-Gravity
         </p>
       </footer>
     </div>

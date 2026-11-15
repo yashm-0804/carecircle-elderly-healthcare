@@ -17,10 +17,11 @@ import {
   Plus,
   Trash2,
   Clock,
-  Send,
   Sparkles,
   UserCheck,
   CheckCircle,
+  Activity,
+  Heart,
 } from "lucide-react";
 
 interface CaregiverHubProps {
@@ -85,7 +86,6 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
     setSimulating(true);
     setSimulateSuccess(null);
     try {
-      // Find the first available scheduled, snoozed, or active dose dynamically
       const targetDose = doses.find((d) => d.status === "SCHEDULED" || d.status === "SNOOZED") || doses[0];
       if (!targetDose) {
         setSimulateSuccess("No doses currently scheduled to escalate.");
@@ -130,24 +130,26 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-      {/* Top Banner with Senior Context */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-3xl shadow-inner">
-            👵
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-300">
+      {/* Top Banner Card with Glass Effect */}
+      <div className="rounded-3xl p-6 sm:p-8 apple-glass border border-white/80 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-400 via-indigo-400 to-pink-400 p-0.5 shadow-md shadow-pink-500/15">
+            <div className="w-full h-full rounded-3xl bg-white/95 flex items-center justify-center text-3xl">
+              👵
+            </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
                 Eleanor Vance&apos;s Care Profile
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-pink-100 text-pink-700 border border-pink-200/60">
                 Age 78
               </span>
             </div>
-            <p className="text-sm font-semibold text-slate-600 mt-1">
-              Active Management: Hypertension, Type-2 Diabetes • Primary Caregiver: {currentUser.name} ({currentUser.relationship || "Care Team"})
+            <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-1">
+              Active Management: Hypertension, Type-2 Diabetes • Caregiver: {currentUser.name} ({currentUser.relationship || "Care Team"})
             </p>
           </div>
         </div>
@@ -157,16 +159,16 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
           onClick={handleSimulate}
           disabled={simulating}
           type="button"
-          className="px-5 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-extrabold text-sm flex items-center gap-2.5 shadow-md shadow-rose-600/25 transition active:scale-95"
+          className="px-5 py-3.5 rounded-2xl apple-button-pink disabled:opacity-40 font-black text-xs sm:text-sm flex items-center gap-2.5 shadow-lg shadow-pink-500/25 transition-all active:scale-95"
           title="Simulates a missed dose and verifies proactive email dispatch"
         >
-          <Sparkles className="w-4 h-4 text-amber-300" />
+          <Sparkles className="w-4 h-4 text-white" />
           <span>{simulating ? "Dispatching Alert..." : "⚡ Simulate Missed Dose Alert"}</span>
         </button>
       </div>
 
       {simulateSuccess && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-900 text-sm font-bold flex items-center gap-2 animate-in fade-in">
+        <div className="p-4 rounded-2xl apple-glass-sky border border-sky-300 text-sky-950 text-sm font-bold flex items-center gap-2 shadow-sm animate-in fade-in">
           <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <span>{simulateSuccess}</span>
         </div>
@@ -174,8 +176,8 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
 
       {/* Adherence & Health Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-2xl p-5 apple-glass-card border border-white/80 shadow-sm">
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
             Adherence Rate
           </span>
           <div className="flex items-baseline gap-2 mt-2">
@@ -184,16 +186,16 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             </span>
             <span className="text-xs font-bold text-emerald-600">On Target</span>
           </div>
-          <div className="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-200/60 h-2 rounded-full mt-3 overflow-hidden">
             <div
-              className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full transition-all duration-500"
               style={{ width: `${metrics.adherenceRate}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-2xl p-5 apple-glass-card border border-white/80 shadow-sm">
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
             Streak Days
           </span>
           <div className="flex items-baseline gap-2 mt-2">
@@ -202,11 +204,11 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             </span>
             <span className="text-xs font-bold text-amber-600">Days Active</span>
           </div>
-          <p className="text-xs text-slate-500 mt-3 font-medium">Consistent daily intake</p>
+          <p className="text-xs text-slate-500 mt-3 font-semibold">Consistent daily intake</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-2xl p-5 apple-glass-card border border-white/80 shadow-sm">
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
             Prescriptions Active
           </span>
           <div className="flex items-baseline gap-2 mt-2">
@@ -215,30 +217,30 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             </span>
             <span className="text-xs font-bold text-sky-600">Monitored</span>
           </div>
-          <p className="text-xs text-slate-500 mt-3 font-medium">Auto-refill alerts on</p>
+          <p className="text-xs text-slate-500 mt-3 font-semibold">Auto-refill alerts on</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-2xl p-5 apple-glass-card border border-white/80 shadow-sm">
+          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">
             Upcoming Visits
           </span>
           <div className="flex items-baseline gap-2 mt-2">
             <span className="text-3xl font-black text-slate-900">
               {appointments.filter((a) => a.status === "UPCOMING").length}
             </span>
-            <span className="text-xs font-bold text-indigo-600">Scheduled</span>
+            <span className="text-xs font-bold text-pink-600">Scheduled</span>
           </div>
-          <p className="text-xs text-slate-500 mt-3 font-medium">Companion assigned</p>
+          <p className="text-xs text-slate-500 mt-3 font-semibold">Companion assigned</p>
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+      {/* Tab Navigation Menu */}
+      <div className="flex items-center gap-2 border-b border-white/60 pb-2 overflow-x-auto no-scrollbar">
         {[
-          { key: "overview", label: "Care Circle Feed", icon: UserCheck },
+          { key: "overview", label: "Care Feed", icon: UserCheck },
           { key: "medications", label: `Medications (${medications.length})`, icon: Pill },
           { key: "appointments", label: `Appointments (${appointments.length})`, icon: Calendar },
-          { key: "escalation", label: `Escalation & Email Logs (${alerts.length})`, icon: Mail },
+          { key: "escalation", label: `Escalations & Emails (${alerts.length})`, icon: Mail },
         ].map((tab) => {
           const Icon = tab.icon;
           return (
@@ -246,10 +248,10 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
               type="button"
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm transition ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all ${
                 activeTab === tab.key
-                  ? "bg-sky-600 text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100"
+                  ? "apple-button-primary"
+                  : "bg-white/60 hover:bg-white text-slate-600 shadow-2xs"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -263,32 +265,32 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
       {activeTab === "overview" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Active Alerts */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+          <div className="rounded-3xl p-6 apple-glass-card border border-white/80 shadow-sm">
             <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-amber-500" />
               <span>Priority Caregiver Alerts</span>
             </h3>
             {alerts.length === 0 ? (
-              <p className="text-sm text-slate-500 font-medium">No active alerts. All doses on schedule!</p>
+              <p className="text-sm text-slate-500 font-semibold">No active alerts. All doses on schedule!</p>
             ) : (
               <div className="space-y-3">
                 {alerts.map((alert) => (
                   <div
                     key={alert.id}
-                    className={`p-4 rounded-2xl border ${
+                    className={`p-4 rounded-2xl border transition-all ${
                       alert.severity === "CRITICAL"
-                        ? "bg-rose-50 border-rose-200 text-rose-950"
-                        : "bg-amber-50 border-amber-200 text-amber-950"
+                        ? "apple-glass-pink border-pink-300 text-pink-950"
+                        : "apple-glass-sky border-sky-300 text-sky-950"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-black text-sm">{alert.title}</span>
-                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-white/60">
+                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-white/70">
                         {new Date(alert.triggeredAt).toLocaleTimeString()}
                       </span>
                     </div>
                     <p className="text-xs font-semibold mt-1">{alert.message}</p>
-                    <div className="mt-2 pt-2 border-t border-black/10 flex items-center justify-between text-[11px] font-bold">
+                    <div className="mt-2 pt-2 border-t border-black/5 flex items-center justify-between text-[11px] font-bold opacity-80">
                       <span>Proactive email sent to: {alert.recipients.join(", ")}</span>
                     </div>
                   </div>
@@ -297,15 +299,15 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             )}
           </div>
 
-          {/* Quick Doctor Summary */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+          {/* Next Doctor Summary */}
+          <div className="rounded-3xl p-6 apple-glass-card border border-white/80 shadow-sm">
             <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-sky-600" />
               <span>Next Doctor Consultations</span>
             </h3>
             <div className="space-y-3">
               {appointments.slice(0, 2).map((appt) => (
-                <div key={appt.id} className="p-4 rounded-2xl border border-slate-200 bg-slate-50/50">
+                <div key={appt.id} className="p-4 rounded-2xl apple-glass border border-white/80">
                   <div className="flex items-center justify-between">
                     <span className="font-black text-slate-900 text-sm">
                       {appt.doctorName}
@@ -317,7 +319,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                   <p className="text-xs font-bold text-slate-500 mt-0.5">
                     {appt.specialty} • {appt.clinicName}
                   </p>
-                  <p className="text-xs font-medium text-slate-700 mt-2">
+                  <p className="text-xs font-semibold text-slate-700 mt-2">
                     Prep: {appt.preparationNotes}
                   </p>
                 </div>
@@ -338,7 +340,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
               <button
                 onClick={() => setShowAddMed(!showAddMed)}
                 type="button"
-                className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm flex items-center gap-2 shadow transition"
+                className="px-4 py-2.5 rounded-2xl apple-button-primary font-bold text-xs sm:text-sm flex items-center gap-2 shadow"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Medication</span>
@@ -346,9 +348,9 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             )}
           </div>
 
-          {/* Add Medication Modal/Form */}
+          {/* Add Medication Form */}
           {showAddMed && (
-            <form onSubmit={handleCreateMed} className="p-6 bg-slate-50 rounded-3xl border border-slate-300 space-y-4">
+            <form onSubmit={handleCreateMed} className="p-6 apple-glass rounded-3xl border border-white/80 space-y-4 shadow-xl">
               <h4 className="text-base font-black text-slate-900">Add New Prescription</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
@@ -359,7 +361,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. Amlodipine"
                     value={newMed.name}
                     onChange={(e) => setNewMed({ ...newMed, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -370,7 +372,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. 5 mg"
                     value={newMed.dosage}
                     onChange={(e) => setNewMed({ ...newMed, dosage: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -380,7 +382,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     required
                     value={newMed.scheduleTime}
                     onChange={(e) => setNewMed({ ...newMed, scheduleTime: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -388,7 +390,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                   <select
                     value={newMed.timeOfDay}
                     onChange={(e) => setNewMed({ ...newMed, timeOfDay: e.target.value as any })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   >
                     <option value="MORNING">Morning</option>
                     <option value="AFTERNOON">Afternoon</option>
@@ -403,16 +405,16 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. White Round"
                     value={newMed.pillColor}
                     onChange={(e) => setNewMed({ ...newMed, pillColor: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-600 block mb-1">Refill Pills Remaining</label>
+                  <label className="text-xs font-bold text-slate-600 block mb-1">Refill Remaining</label>
                   <input
                     type="number"
                     value={newMed.refillCount}
                     onChange={(e) => setNewMed({ ...newMed, refillCount: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
               </div>
@@ -423,7 +425,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                   placeholder="e.g. Take with warm food and water"
                   value={newMed.instructions}
                   onChange={(e) => setNewMed({ ...newMed, instructions: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">
@@ -436,7 +438,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow"
+                  className="px-5 py-2 rounded-xl apple-button-primary font-bold text-sm shadow"
                 >
                   Save Schedule
                 </button>
@@ -449,7 +451,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             {medications.map((med) => (
               <div
                 key={med.id}
-                className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between"
+                className="p-5 apple-glass-card rounded-2xl border border-white/80 shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between">
@@ -498,13 +500,13 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-black text-slate-900">
-              Doctor Appointments & Routine Checkups
+              Doctor Appointments & Consultations
             </h3>
             {currentUser.role === "CAREGIVER" && (
               <button
                 onClick={() => setShowAddAppt(!showAddAppt)}
                 type="button"
-                className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm flex items-center gap-2 shadow transition"
+                className="px-4 py-2.5 rounded-2xl apple-button-primary font-bold text-xs sm:text-sm flex items-center gap-2 shadow"
               >
                 <Plus className="w-4 h-4" />
                 <span>Book Appointment</span>
@@ -514,7 +516,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
 
           {/* Add Appointment Form */}
           {showAddAppt && (
-            <form onSubmit={handleCreateAppt} className="p-6 bg-slate-50 rounded-3xl border border-slate-300 space-y-4">
+            <form onSubmit={handleCreateAppt} className="p-6 apple-glass rounded-3xl border border-white/80 space-y-4 shadow-xl">
               <h4 className="text-base font-black text-slate-900">Record New Appointment</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
@@ -525,7 +527,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. Dr. Jennifer Adams"
                     value={newAppt.doctorName}
                     onChange={(e) => setNewAppt({ ...newAppt, doctorName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -536,7 +538,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. Ophthalmology (Eye)"
                     value={newAppt.specialty}
                     onChange={(e) => setNewAppt({ ...newAppt, specialty: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -547,7 +549,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. Westside Vision Pavilion"
                     value={newAppt.clinicName}
                     onChange={(e) => setNewAppt({ ...newAppt, clinicName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -557,7 +559,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     required
                     value={newAppt.dateTime}
                     onChange={(e) => setNewAppt({ ...newAppt, dateTime: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -568,7 +570,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. 500 Health Ave"
                     value={newAppt.address}
                     onChange={(e) => setNewAppt({ ...newAppt, address: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
                 <div>
@@ -578,7 +580,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                     placeholder="e.g. Sarah Vance"
                     value={newAppt.companionAssigned}
                     onChange={(e) => setNewAppt({ ...newAppt, companionAssigned: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold text-sm bg-white/80"
                   />
                 </div>
               </div>
@@ -592,7 +594,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow"
+                  className="px-5 py-2 rounded-xl apple-button-primary font-bold text-sm shadow"
                 >
                   Confirm & Send Automated Reminder
                 </button>
@@ -605,16 +607,16 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             {appointments.map((appt) => (
               <div
                 key={appt.id}
-                className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+                className="p-6 apple-glass-card rounded-3xl border border-white/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-xl flex-shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-500 text-white flex items-center justify-center font-black text-xl flex-shrink-0 shadow-md">
                     🏥
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="text-lg font-black text-slate-900">{appt.doctorName}</h4>
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-pink-100 text-pink-800">
                         {appt.specialty}
                       </span>
                     </div>
@@ -646,7 +648,7 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
         </div>
       )}
 
-      {/* Tab 4: Escalation & Email Audit Logs */}
+      {/* Tab 4: Escalation Logs */}
       {activeTab === "escalation" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -662,11 +664,11 @@ export const CaregiverHub: React.FC<CaregiverHubProps> = ({
             {alerts.map((alert) => (
               <div
                 key={alert.id}
-                className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-2"
+                className="p-5 apple-glass-card rounded-2xl border border-white/80 shadow-sm space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-sky-600" />
+                    <Mail className="w-4 h-4 text-pink-600" />
                     <span className="font-extrabold text-sm text-slate-900">{alert.title}</span>
                   </div>
                   <span className="text-xs font-bold text-slate-400">
