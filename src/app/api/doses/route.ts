@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTodayDoses, recordDoseAction, getAdherenceMetrics } from "@/lib/db";
 import { DoseActionSchema } from "@/lib/validations";
+import { sanitizeText } from "@/lib/sanitize";
 
 export async function GET() {
   const doses = getTodayDoses();
@@ -21,7 +22,8 @@ export async function POST(req: NextRequest) {
     }
 
     const { doseId, action, verifiedVia, notes } = parseResult.data;
-    const updated = recordDoseAction(doseId, action, verifiedVia, notes);
+    const sanitizedNotes = notes ? sanitizeText(notes) : undefined;
+    const updated = recordDoseAction(doseId, action, verifiedVia, sanitizedNotes);
 
     if (!updated) {
       return NextResponse.json(

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { PasscodeGateway } from "@/components/PasscodeGateway";
 import { SeniorKiosk } from "@/components/SeniorKiosk";
 import { CaregiverHub } from "@/components/CaregiverHub";
+import { FamilyView } from "@/components/FamilyView";
 
 export default function Home() {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
@@ -57,7 +58,6 @@ export default function Home() {
     fetchData();
   }, [currentUser]);
 
-  // Handle Senior / Caregiver Dose Action
   const handleTakeDose = async (
     doseId: string,
     verifiedVia: "MANUAL" | "VOICE" | "VISION_AI" = "MANUAL"
@@ -163,13 +163,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 transition-colors">
+      {/* Skip to main content link for keyboard accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-sky-600 focus:text-white focus:rounded-xl focus:text-sm focus:font-bold"
+      >
+        Skip to main content
+      </a>
+
       <Navbar
         currentUser={currentUser}
         onLogout={() => setCurrentUser(null)}
         activeRole={currentUser?.role || "GUEST"}
       />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" role="main" aria-label="CareCircle main content">
         {!currentUser ? (
           <PasscodeGateway onAuthenticated={(profile) => setCurrentUser(profile)} />
         ) : currentUser.role === "SENIOR" ? (
@@ -178,6 +186,14 @@ export default function Home() {
             appointments={appointments}
             onTakeDose={handleTakeDose}
             onSnoozeDose={handleSnoozeDose}
+          />
+        ) : currentUser.role === "FAMILY" ? (
+          <FamilyView
+            currentUser={currentUser}
+            doses={doses}
+            medications={medications}
+            appointments={appointments}
+            metrics={metrics}
           />
         ) : (
           <CaregiverHub
@@ -194,7 +210,7 @@ export default function Home() {
         )}
       </main>
 
-      <footer className="border-t border-slate-200 py-6 bg-white text-center text-xs text-slate-500 font-medium">
+      <footer role="contentinfo" className="border-t border-slate-200 py-6 bg-white text-center text-xs text-slate-500 font-medium">
         <p>
           CareCircle Elderly Care & Medication Management Platform • Built with Anti-Gravity for PromptWars x Catalyst
         </p>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getMedications, addMedication } from "@/lib/db";
 import { MedicationSchema } from "@/lib/validations";
+import { sanitizeObject } from "@/lib/sanitize";
 
 export async function GET() {
   const meds = getMedications();
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const created = addMedication(parseResult.data);
+    const created = addMedication(sanitizeObject(parseResult.data));
     return NextResponse.json({ success: true, medication: created }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
