@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAlerts, triggerEscalation } from "@/lib/db";
 import { EscalationTriggerSchema } from "@/lib/validations";
-import { getEmailAuditLog } from "@/lib/email";
+import { container } from "@/core/infrastructure/container";
 
 export async function GET() {
-  const alerts = getAlerts();
-  const recentEmails = getEmailAuditLog();
+  const alerts = await container.alertRepo.findAll();
+  const recentEmails = await container.notificationService.getAuditLogs();
   return NextResponse.json({ success: true, alerts, recentEmails });
 }
 
@@ -22,23 +21,19 @@ export async function POST(req: NextRequest) {
     }
 
     const { doseId, reason } = parseResult.data;
-    const alert = await triggerEscalation(doseId, reason);
+    const alert = await container.triggerEscalationUseCase.execute({ doseId, reason });
 
-    if (!alert) {
-      return NextResponse.json(
-        { success: false, error: "Dose not found to escalate." },
-        { status: 404 }
-      );
-    }
-
-    const recentEmails = getEmailAuditLog();
+    const recentEmails = await container.notificationService.getAuditLogs();
     return NextResponse.json({
       success: true,
       alert,
       recentEmails,
-      message: "Caregiver alert and proactive email dispatched successfully.",
+      message: "Caregiver alert and proactive email dispatched successfully via Clean Architecture UseCase.",
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.message?.includes("not found")) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 404 });
+    }
     return NextResponse.json(
       { success: false, error: "Failed to trigger escalation." },
       { status: 500 }

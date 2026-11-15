@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateMedication, deleteMedication } from "@/lib/db";
 import { MedicationSchema } from "@/lib/validations";
+import { sanitizeObject } from "@/lib/sanitize";
+import { container } from "@/core/infrastructure/container";
 
 export async function PUT(
   req: NextRequest,
@@ -17,7 +18,8 @@ export async function PUT(
       );
     }
 
-    const updated = updateMedication(params.id, parseResult.data);
+    const sanitizedData = sanitizeObject(parseResult.data as Record<string, unknown>);
+    const updated = await container.medicationRepo.update(params.id, sanitizedData);
     if (!updated) {
       return NextResponse.json(
         { success: false, error: "Medication not found." },
@@ -38,7 +40,7 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const success = deleteMedication(params.id);
+  const success = await container.medicationRepo.delete(params.id);
   if (!success) {
     return NextResponse.json(
       { success: false, error: "Medication not found." },

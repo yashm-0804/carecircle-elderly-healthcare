@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getTodayDoses, recordDoseAction, getAdherenceMetrics } from "@/lib/db";
 import { DoseActionSchema } from "@/lib/validations";
 import { sanitizeText } from "@/lib/sanitize";
+import { container } from "@/core/infrastructure/container";
 
 export async function GET() {
-  const doses = getTodayDoses();
-  const metrics = getAdherenceMetrics();
+  const doses = await container.doseRepo.findTodayDoses();
+  const metrics = await container.doseRepo.getMetrics();
   return NextResponse.json({ success: true, doses, metrics });
 }
 
@@ -23,18 +23,19 @@ export async function POST(req: NextRequest) {
 
     const { doseId, action, verifiedVia, notes } = parseResult.data;
     const sanitizedNotes = notes ? sanitizeText(notes) : undefined;
-    const updated = recordDoseAction(doseId, action, verifiedVia, sanitizedNotes);
 
-    if (!updated) {
-      return NextResponse.json(
-        { success: false, error: "Dose record not found." },
-        { status: 404 }
-      );
+    const result = await container.recordDoseUseCase.execute({
+      doseId,
+      action,
+      verifiedVia,
+      notes: sanitizedNotes,
+    });
+
+    return NextResponse.json({ success: true, dose: result.dose, metrics: result.metrics });
+  } catch (error: any) {
+    if (error.message?.includes("not found")) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 404 });
     }
-
-    const metrics = getAdherenceMetrics();
-    return NextResponse.json({ success: true, dose: updated, metrics });
-  } catch (error) {
     return NextResponse.json(
       { success: false, error: "Failed to record dose action." },
       { status: 500 }

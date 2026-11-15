@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAppointments, addAppointment } from "@/lib/db";
 import { DoctorAppointmentSchema } from "@/lib/validations";
+import { container } from "@/core/infrastructure/container";
 
 export async function GET() {
-  const appointments = getAppointments();
+  const appointments = await container.appointmentRepo.findAll();
   return NextResponse.json({ success: true, appointments });
 }
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const created = addAppointment(parseResult.data);
+    const created = await container.scheduleAppointmentUseCase.execute(parseResult.data);
     return NextResponse.json({ success: true, appointment: created }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

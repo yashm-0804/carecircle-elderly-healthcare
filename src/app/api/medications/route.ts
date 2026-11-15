@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMedications, addMedication } from "@/lib/db";
 import { MedicationSchema } from "@/lib/validations";
 import { sanitizeObject } from "@/lib/sanitize";
+import { container } from "@/core/infrastructure/container";
 
 export async function GET() {
-  const meds = getMedications();
+  const meds = await container.medicationRepo.findAll();
   return NextResponse.json({ success: true, medications: meds });
 }
 
@@ -20,7 +20,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const created = addMedication(sanitizeObject(parseResult.data));
+    const sanitizedData = sanitizeObject(parseResult.data);
+    const created = await container.medicationRepo.save({
+      ...sanitizedData,
+      id: `med_${Date.now()}`,
+      seniorId: "usr_senior_01",
+    });
+
     return NextResponse.json({ success: true, medication: created }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
