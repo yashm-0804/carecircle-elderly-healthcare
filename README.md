@@ -1,6 +1,7 @@
 # 🌸 CareCircle — Elderly Care & Medication Management Platform
 > **PromptWars x Catalyst | Google for Developers | MnM Build with AI Hackathon**  
-> *Developed with Google Antigravity Agentic Framework*
+> *Developed with Google Antigravity Agentic Framework*  
+> 🌐 **Live Deployed Web App**: [https://carecircle-elderly-healthcare.vercel.app](https://carecircle-elderly-healthcare.vercel.app)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2_App_Router-black?logo=next.js)](https://nextjs.org/)
