@@ -194,11 +194,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/70 text-slate-900 transition-colors relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-slate-50/70 dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 transition-colors relative overflow-hidden">
       {/* Ambient Apple Liquid Glass Background Glow Orbs */}
-      <div className="fixed top-[-10vw] left-[-10vw] w-[45vw] h-[45vw] rounded-full bg-gradient-to-tr from-sky-200/40 to-blue-300/30 blur-3xl pointer-events-none animate-float-slow -z-10" />
-      <div className="fixed bottom-[-10vw] right-[-10vw] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-pink-200/40 to-purple-200/30 blur-3xl pointer-events-none animate-float-reverse -z-10" />
-      <div className="fixed top-[30%] right-[15%] w-[35vw] h-[35vw] rounded-full bg-gradient-to-tr from-pink-100/30 via-sky-100/30 to-indigo-100/25 blur-3xl pointer-events-none animate-pulse-subtle -z-10" />
+      <div className="fixed top-[-10vw] left-[-10vw] w-[45vw] h-[45vw] rounded-full ambient-orb-1 blur-3xl pointer-events-none animate-float-slow -z-10" />
+      <div className="fixed bottom-[-10vw] right-[-10vw] w-[50vw] h-[50vw] rounded-full ambient-orb-2 blur-3xl pointer-events-none animate-float-reverse -z-10" />
+      <div className="fixed top-[30%] right-[15%] w-[35vw] h-[35vw] rounded-full ambient-orb-3 blur-3xl pointer-events-none animate-pulse-subtle -z-10" />
 
       {/* Skip to main content link for keyboard accessibility */}
       <a
@@ -271,7 +271,7 @@ export default function Home() {
       <CareChatbot />
 
       {/* Frosted Glass Footer */}
-      <footer role="contentinfo" className="py-6 border-t border-white/60 bg-white/40 backdrop-blur-md text-center text-xs text-slate-500 font-semibold">
+      <footer role="contentinfo" className="py-6 border-t border-white/60 dark:border-white/10 bg-white/40 dark:bg-slate-900/60 backdrop-blur-md text-center text-xs text-slate-500 dark:text-slate-400 font-semibold">
         <p>
           CareCircle Elderly Healthcare Management Platform • Apple Glass Design Edition • Built with Anti-Gravity
         </p>

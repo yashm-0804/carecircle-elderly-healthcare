@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { UserProfile } from "@/types";
-import { HeartPulse, Eye, Type, Volume2, LogOut, ShieldCheck, User, Settings, Sparkles } from "lucide-react";
+import { HeartPulse, Eye, Type, Volume2, LogOut, ShieldCheck, User, Settings, Sparkles, Moon, Sun } from "lucide-react";
 
 interface NavbarProps {
   currentUser: UserProfile | null;
@@ -19,8 +19,53 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenProfile,
   onOpenSettings,
 }) => {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [highContrast, setHighContrast] = useState(false);
   const [fontSizeLevel, setFontSizeLevel] = useState<"normal" | "large" | "xlarge">("normal");
+
+  useEffect(() => {
+    // Check localStorage or system preference on mount
+    try {
+      const savedTheme = localStorage.getItem("carecircle_theme") as "light" | "dark" | null;
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = savedTheme || (systemPrefersDark ? "dark" : "light");
+      setTheme(initial);
+      applyTheme(initial);
+
+      // Listen for system theme changes if user hasn't explicitly set a preference
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = (e: MediaQueryListEvent) => {
+        if (!localStorage.getItem("carecircle_theme")) {
+          const newTheme = e.matches ? "dark" : "light";
+          setTheme(newTheme);
+          applyTheme(newTheme);
+        }
+      };
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    } catch (e) {
+      // Ignore storage/media query errors in restricted environments
+    }
+  }, []);
+
+  const applyTheme = (t: "light" | "dark") => {
+    if (t === "dark") {
+      document.documentElement.classList.add("dark");
+      document.body.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.classList.remove("dark");
+    }
+  };
+
+  const toggleTheme = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    applyTheme(next);
+    try {
+      localStorage.setItem("carecircle_theme", next);
+    } catch (e) {}
+  };
 
   useEffect(() => {
     if (highContrast) {
@@ -62,14 +107,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         {/* Brand */}
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-pink-500 p-0.5 shadow-md shadow-sky-500/20">
-            <div className="w-full h-full rounded-2xl bg-white/90 flex items-center justify-center text-sky-600">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-pink-500 p-0.5 shadow-md shadow-sky-500/20 flex-shrink-0">
+            <div className="w-full h-full rounded-2xl bg-white/90 dark:bg-slate-900/90 flex items-center justify-center text-sky-600 dark:text-sky-400">
               <HeartPulse className="w-7 h-7" aria-hidden="true" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-slate-900 via-sky-900 to-pink-900 bg-clip-text text-transparent">
+              <span className="text-2xl font-black tracking-tight brand-text-gradient">
                 CareCircle
               </span>
               <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-pink-100 text-pink-700 border border-pink-200/60 shadow-2xs">
@@ -93,7 +138,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Read page summary aloud"
             title="Read summary aloud"
           >
-            <Volume2 className="w-5 h-5 text-sky-600" />
+            <Volume2 className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          </button>
+
+          {/* Dedicated Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            type="button"
+            className="p-2.5 rounded-2xl bg-white/60 hover:bg-white text-slate-700 border border-white/80 shadow-xs transition active:scale-95"
+            aria-label={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {theme === "dark" ? (
+              <Sun className="w-5 h-5 text-amber-400" />
+            ) : (
+              <Moon className="w-5 h-5 text-indigo-600" />
+            )}
           </button>
 
           {/* High Contrast Mode Toggle */}
@@ -102,11 +162,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="button"
             className={`p-2.5 rounded-2xl border transition active:scale-95 ${
               highContrast
-                ? "bg-black text-white border-white"
+                ? "bg-black text-yellow-400 border-yellow-400 shadow-md font-bold"
                 : "bg-white/60 hover:bg-white border-white/80 text-slate-700 shadow-xs"
             }`}
-            aria-label="Toggle High-Contrast Mode for low vision"
-            title="Toggle High Contrast Mode"
+            aria-label="Toggle High-Contrast AAA Mode for low vision"
+            title="Toggle High-Contrast AAA Mode"
           >
             <Eye className="w-5 h-5" />
           </button>
@@ -119,7 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Change text size"
             title="Increase text size"
           >
-            <Type className="w-4 h-4 text-sky-600" />
+            <Type className="w-4 h-4 text-sky-600 dark:text-sky-400" />
             <span className="uppercase">{fontSizeLevel}</span>
           </button>
 
@@ -134,7 +194,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="View Senior Health Record"
                 aria-label="View Patient Profile"
               >
-                <User className="w-4 h-4 text-pink-600" />
+                <User className="w-4 h-4 text-pink-600 dark:text-pink-400" />
                 <span className="hidden md:inline">Profile</span>
               </button>
 
@@ -146,16 +206,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="Care Preferences & Settings"
                 aria-label="Open Settings"
               >
-                <Settings className="w-4 h-4 text-slate-600" />
+                <Settings className="w-4 h-4 text-slate-600 dark:text-slate-300" />
               </button>
 
               {/* Role Badge & Switch Passcode */}
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-200/80">
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200/80 dark:border-white/20">
                 <div className="hidden lg:flex flex-col text-right">
                   <span className="text-xs font-black text-slate-900 leading-none">
                     {currentUser.name}
                   </span>
-                  <span className="text-[10px] text-pink-700 font-bold mt-1">
+                  <span className="text-[10px] text-pink-700 dark:text-pink-300 font-bold mt-1">
                     {currentUser.role === "SENIOR"
                       ? "Senior Kiosk"
                       : currentUser.role === "CAREGIVER"

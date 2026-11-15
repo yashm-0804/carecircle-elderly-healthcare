@@ -13,11 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="color-scheme" content="light dark" />
       </head>
-      <body className="min-h-screen bg-slate-50 antialiased selection:bg-sky-200">
+      <body className="min-h-screen bg-slate-50 antialiased selection:bg-sky-200 transition-colors duration-300">
         <div id="aria-announcer" aria-live="polite" className="sr-only" />
         {children}
       </body>

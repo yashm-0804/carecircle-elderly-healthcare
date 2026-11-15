@@ -4,9 +4,13 @@
 
 :root {
   --font-scale: 1rem;
+  color-scheme: light dark;
 }
 
-/* Apple-style Smooth Font & Canvas */
+/* ==========================================================================
+   Apple-Style Glassmorphism & Core Canvas
+   ========================================================================== */
+
 body {
   color: #0f172a;
   background-color: #f8fafc;
@@ -14,22 +18,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Apple Glassmorphism Classes */
+/* Light Mode Frosted Glass */
 .apple-glass {
-  background: rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.75);
   box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.06), inset 0 1px 2px 0 rgba(255, 255, 255, 0.9);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .apple-glass-card {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.76);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 16px 40px -12px rgba(99, 102, 241, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -40,17 +46,19 @@ body {
 }
 
 .apple-glass-pink {
-  background: linear-gradient(135deg, rgba(253, 242, 248, 0.75) 0%, rgba(255, 255, 255, 0.65) 100%);
+  background: linear-gradient(135deg, rgba(253, 242, 248, 0.78) 0%, rgba(255, 255, 255, 0.7) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(251, 207, 232, 0.55);
+  border: 1px solid rgba(251, 207, 232, 0.65);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .apple-glass-sky {
-  background: linear-gradient(135deg, rgba(240, 249, 255, 0.75) 0%, rgba(255, 255, 255, 0.65) 100%);
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.78) 0%, rgba(255, 255, 255, 0.7) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(186, 230, 253, 0.6);
+  border: 1px solid rgba(186, 230, 253, 0.7);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .apple-button-primary {
@@ -66,18 +74,240 @@ body {
 }
 
 .apple-button-pink {
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  background: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
   color: #ffffff;
-  box-shadow: 0 8px 24px -4px rgba(236, 72, 153, 0.35);
+  box-shadow: 0 8px 24px -4px rgba(219, 39, 119, 0.35);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .apple-button-pink:hover {
   transform: translateY(-1px) scale(1.01);
-  box-shadow: 0 12px 28px -4px rgba(236, 72, 153, 0.45);
+  box-shadow: 0 12px 28px -4px rgba(219, 39, 119, 0.45);
 }
 
-/* High Contrast Mode for Low-Vision Seniors (WCAG 2.1 AAA) */
+/* Ambient Orbs */
+.ambient-orb-1 {
+  background: radial-gradient(circle, rgba(186, 230, 253, 0.45) 0%, rgba(199, 210, 254, 0.35) 100%);
+  transition: background 0.5s ease;
+}
+
+.ambient-orb-2 {
+  background: radial-gradient(circle, rgba(251, 207, 232, 0.4) 0%, rgba(233, 213, 255, 0.3) 100%);
+  transition: background 0.5s ease;
+}
+
+.ambient-orb-3 {
+  background: radial-gradient(circle, rgba(244, 244, 245, 0.35) 0%, rgba(224, 231, 255, 0.25) 100%);
+  transition: background 0.5s ease;
+}
+
+/* Brand Text Gradient in Light Mode */
+.brand-text-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #be185d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   Apple Dark Mode — Ultra-Legible Frosted Space Slate
+   ========================================================================== */
+
+html.dark,
+body.dark {
+  color-scheme: dark;
+  background-color: #0b1120 !important;
+  color: #f8fafc !important;
+}
+
+/* Ambient Orbs in Dark Mode: Deep Midnight Aurora Glow */
+.dark .ambient-orb-1 {
+  background: radial-gradient(circle, rgba(14, 116, 144, 0.25) 0%, rgba(67, 56, 202, 0.2) 100%);
+}
+
+.dark .ambient-orb-2 {
+  background: radial-gradient(circle, rgba(190, 24, 93, 0.22) 0%, rgba(109, 40, 217, 0.18) 100%);
+}
+
+.dark .ambient-orb-3 {
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+}
+
+/* Frosted Dark Glass Surfaces */
+.dark .apple-glass {
+  background: rgba(15, 23, 42, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark .apple-glass-card {
+  background: rgba(24, 34, 53, 0.76) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.75), inset 0 1px 2px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.dark .apple-glass-card:hover {
+  background: rgba(30, 46, 76, 0.84) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 24px 54px -10px rgba(0, 0, 0, 0.85), 0 0 24px -2px rgba(56, 189, 248, 0.22) !important;
+}
+
+.dark .apple-glass-pink {
+  background: linear-gradient(135deg, rgba(80, 7, 36, 0.45) 0%, rgba(30, 41, 59, 0.82) 100%) !important;
+  border-color: rgba(244, 114, 182, 0.35) !important;
+  box-shadow: 0 12px 32px -8px rgba(244, 114, 182, 0.15) !important;
+}
+
+.dark .apple-glass-sky {
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.5) 0%, rgba(30, 41, 59, 0.82) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 12px 32px -8px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* Luminous Brand Header Gradient in Dark Mode */
+.dark .brand-text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #7dd3fc 50%, #f472b6 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Typography High-Contrast Enhancements for Dark Mode */
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: #ffffff !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-sky-900,
+.dark .text-sky-800,
+.dark .text-sky-950 {
+  color: #7dd3fc !important;
+}
+
+.dark .text-sky-700,
+.dark .text-sky-600 {
+  color: #38bdf8 !important;
+}
+
+.dark .text-pink-900,
+.dark .text-pink-800,
+.dark .text-pink-950 {
+  color: #f9a8d4 !important;
+}
+
+.dark .text-pink-700,
+.dark .text-pink-600 {
+  color: #f472b6 !important;
+}
+
+.dark .text-amber-900,
+.dark .text-amber-800 {
+  color: #fde68a !important;
+}
+
+.dark .text-amber-700,
+.dark .text-amber-600 {
+  color: #fbbf24 !important;
+}
+
+.dark .text-emerald-900,
+.dark .text-emerald-800 {
+  color: #a7f3d0 !important;
+}
+
+.dark .text-emerald-700,
+.dark .text-emerald-600 {
+  color: #34d399 !important;
+}
+
+/* Seamless Dark Mode Tiles for Nested White Blocks */
+.dark .bg-white,
+.dark .bg-white\/80,
+.dark .bg-white\/85,
+.dark .bg-white\/90,
+.dark .bg-white\/95 {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.dark .bg-white\/60,
+.dark .bg-white\/70 {
+  background-color: rgba(30, 41, 59, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-100\/70,
+.dark .bg-slate-100\/80 {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark .bg-sky-50,
+.dark .bg-sky-100,
+.dark .bg-sky-100\/80,
+.dark .bg-sky-100\/90 {
+  background-color: rgba(12, 74, 110, 0.4) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+.dark .bg-pink-50,
+.dark .bg-pink-100,
+.dark .bg-pink-100\/80,
+.dark .bg-pink-100\/90 {
+  background-color: rgba(131, 24, 67, 0.38) !important;
+  border-color: rgba(244, 114, 182, 0.35) !important;
+}
+
+.dark .bg-amber-100,
+.dark .bg-amber-100\/90 {
+  background-color: rgba(120, 53, 15, 0.45) !important;
+  border-color: rgba(251, 191, 36, 0.35) !important;
+}
+
+.dark .bg-emerald-100 {
+  background-color: rgba(6, 95, 70, 0.45) !important;
+  border-color: rgba(52, 211, 153, 0.35) !important;
+}
+
+/* Dark Mode Form Inputs & Selects */
+.dark input[type="text"],
+.dark input[type="password"],
+.dark input[type="datetime-local"],
+.dark input[type="number"],
+.dark select,
+.dark textarea {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-white\/60,
+.dark .border-white\/70,
+.dark .border-white\/80 {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* ==========================================================================
+   High-Contrast Mode (WCAG 2.1 AAA Pure Accessibility)
+   ========================================================================== */
+
 body.high-contrast {
   background-color: #000000 !important;
   color: #ffffff !important;
@@ -87,36 +317,94 @@ body.high-contrast .apple-glass,
 body.high-contrast .apple-glass-card,
 body.high-contrast .apple-glass-pink,
 body.high-contrast .apple-glass-sky {
-  background: #111111 !important;
+  background: #000000 !important;
   color: #ffffff !important;
-  border-color: #ffffff !important;
+  border: 2px solid #ffffff !important;
   box-shadow: none !important;
 }
 
-body.high-contrast .text-slate-600,
-body.high-contrast .text-slate-500,
-body.high-contrast .text-slate-700 {
-  color: #f1f5f9 !important;
+body.high-contrast .brand-text-gradient {
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
 }
 
-/* Large, accessible focus indicator for keyboard traversal */
+body.high-contrast .text-slate-900,
+body.high-contrast .text-slate-800,
+body.high-contrast .text-slate-700,
+body.high-contrast .text-slate-600,
+body.high-contrast .text-slate-500,
+body.high-contrast .text-slate-400 {
+  color: #ffffff !important;
+}
+
+body.high-contrast .text-sky-900,
+body.high-contrast .text-sky-800,
+body.high-contrast .text-sky-700,
+body.high-contrast .text-sky-600 {
+  color: #38bdf8 !important;
+}
+
+body.high-contrast .text-pink-900,
+body.high-contrast .text-pink-800,
+body.high-contrast .text-pink-700,
+body.high-contrast .text-pink-600 {
+  color: #f472b6 !important;
+}
+
+body.high-contrast .text-amber-900,
+body.high-contrast .text-amber-800,
+body.high-contrast .text-amber-700,
+body.high-contrast .text-amber-600 {
+  color: #fde047 !important;
+}
+
+body.high-contrast .bg-white,
+body.high-contrast .bg-white\/80,
+body.high-contrast .bg-white\/85,
+body.high-contrast .bg-white\/90,
+body.high-contrast .bg-slate-50,
+body.high-contrast .bg-slate-100 {
+  background-color: #111111 !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+body.high-contrast button {
+  border: 2px solid #ffffff !important;
+}
+
+/* ==========================================================================
+   Accessibility Focus & Scrollbars
+   ========================================================================== */
+
 *:focus-visible {
-  outline: 3px solid #0284c7 !important;
+  outline: 3px solid #38bdf8 !important;
   outline-offset: 3px !important;
 }
 
-/* Smooth custom scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.5);
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
 }
